@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/mongoose-paginate-ts.svg)](https://badge.fury.io/js/mongoose-paginate-ts)
+
 # mongoose-paginate-ts
 
 Typescript pagination plugin for [Mongoose](http://mongoosejs.com)
