@@ -72,7 +72,7 @@ interface Pagination {
 #### Paginate with
 
 ```ts
-Model.paginate({}).then(result => {
+Model.paginate({}).then((error: Error, result: any) => {
   // ...
 });
 ```
@@ -88,7 +88,7 @@ var options = {
   limit: 5
 };
 
-User.paginate(conditions, options).then(result => {
+User.paginate(conditions, options).then((error: Error, result: any) => {
   // ...
 });
 ```
