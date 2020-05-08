@@ -47,9 +47,9 @@ const User: Pagination<User> = mongoose.model<User, Pagination<User>>("User", us
   - `[populate]` {Object | String} - Paths which should be populated with other documents. [Documentation](http://mongoosejs.com/docs/api.html#query_Query-populate)
   - `[page=1]` {Number}, 
   - `[limit=10]` {Number}, number of docs per page, default is 10
-- `[callback(err, result)]` - If specified the callback is called once pagination results are retrieved or when an error has occurred
+- `[callback(err, result)]` - The callback is called once pagination results are retrieved or when an error has occurred
 
-#### Return value
+#### Result value
 
 Promise fulfilled with an Pagination:
 
