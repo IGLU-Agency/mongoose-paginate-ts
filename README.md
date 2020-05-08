@@ -1,13 +1,13 @@
-# mongoose-pagination-ts
+# mongoose-paginate-ts
 
 Typescript pagination plugin for [Mongoose](http://mongoosejs.com)
 
-[![NPM](https://nodei.co/npm/mongoose-pagination-ts.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/mongoose-pagination-ts)
+[![NPM](https://nodei.co/npm/mongoose-paginate-ts.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/mongoose-paginate-ts)
 
 ## Installation
 
 ```sh
-npm install mongoose-pagination-ts
+npm install mongoose-paginate-ts
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ npm install mongoose-pagination-ts
 Add plugin for a mongoose schema to inject a `paginate` method for pagination:
 
 ```ts
-import { mongoosePagination, Pagination } from "mongoose-pagination-ts";
+import { mongoosePagination, Pagination } from "mongoose-paginate-ts";
 type CateUsergory = mongoose.Document & {
   username: String,
   accounts: [String]
