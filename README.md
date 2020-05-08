@@ -31,7 +31,7 @@ const userSchema = new Schema({
   accounts: [{ type: ObjectId, ref: "Account" }]
 });
 userSchema.plugin(mongoosePagination);
-const User: Pagination<User> = mongoose.model<User, Pagination<TUser>>("User", userSchema);
+const User: Pagination<User> = mongoose.model<User, Pagination<User>>("User", userSchema);
 
 //User.paginate()
 ```
