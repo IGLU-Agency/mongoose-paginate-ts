@@ -36,7 +36,7 @@ const User: Pagination<User> = mongoose.model<User, Pagination<User>>("User", us
 //User.paginate()
 ```
 
-### Model.paginate([query conditions], [options], [callback])
+### Model.paginate([options], [callback])
 
 #### **Parameters**
 
