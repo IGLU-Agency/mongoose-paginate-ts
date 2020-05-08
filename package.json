@@ -1,0 +1,47 @@
+{
+  "name": "mongoose-paginate-ts",
+  "version": "1.0.0",
+  "description": "Typescript pagination plugin for mongoose",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/lucaiaconelli/mongoose-paginate-ts.git"
+  },
+  "keywords": [
+    "mongoose",
+    "ts",
+    "typescript",
+    "paginate",
+    "pagination",
+    "paging",
+    "page",
+    "mongodb",
+    "nextpage",
+    "prevpage",
+    "paginator"
+  ],
+  "author": "Luca Iaconelli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lucaiaconelli/mongoose-paginate-ts/issues"
+  },
+  "homepage": "https://github.com/lucaiaconelli/mongoose-paginate-ts#readme",
+  "devDependencies": {
+    "@types/mongoose": "latest",
+    "mongoose": "latest",
+    "typescript": "latest"
+  },
+  "peerDependencies": {
+    "@types/mongoose": "latest",
+    "mongoose": "latest"
+  },
+  "directories": {
+    "lib": "lib"
+  }
+}
