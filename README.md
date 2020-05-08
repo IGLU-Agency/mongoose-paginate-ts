@@ -18,9 +18,9 @@ Add plugin for a mongoose schema to inject a `paginate` method for pagination:
 
 ```ts
 import { mongoosePagination, Pagination } from "mongoose-paginate-ts";
-type CateUsergory = mongoose.Document & {
+type User = mongoose.Document & {
   username: String,
-  accounts: [String]
+  accounts: [mongoose.Types.ObjectId]
 };
 const userSchema = new Schema({
   username: String,
