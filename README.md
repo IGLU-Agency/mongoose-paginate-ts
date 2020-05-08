@@ -1,12 +1,5 @@
 # mongoose-pagination-ts
 
-[![npm version](https://img.shields.io/npm/v/mongoose-pagination-ts.svg)](https://www.npmjs.com/package/mongoose-pagination-ts.svg)
-[![Dependency Status](https://david-dm.org/LucaIaconelli/mongoose-pagination-ts.svg)](https://david-dm.org/LucaIaconelli/mongoose-pagination-ts.svg)
-[![devDependency Status](https://david-dm.org/LucaIaconelli/mongoose-pagination-ts/dev-status.svg)](https://david-dm.org/LucaIaconelli/mongoose-pagination-ts/dev-status.svg)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/LucaIaconelli/mongoose-paginate-v2/issues)
-[![Downloads](https://img.shields.io/npm/dm/mongoose-pagination-ts.svg)](https://img.shields.io/npm/dm/mongoose-pagination-ts.svg)
-[![HitCount](http://hits.dwyl.io/LucaIaconelli/mongoose-pagination-ts.svg)](http://hits.dwyl.io/LucaIaconelli/mongoose-pagination-ts)
-
 Typescript pagination plugin for [Mongoose](http://mongoosejs.com)
 
 [![NPM](https://nodei.co/npm/mongoose-pagination-ts.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/mongoose-pagination-ts)
