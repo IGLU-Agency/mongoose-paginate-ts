@@ -68,7 +68,7 @@ interface Pagination {
 #### Paginate with
 
 ```ts
-Model.paginate({}).then((error: Error, result: any) => {
+User.paginate({}).then((error: Error, result: any) => {
   // ...
 });
 ```
