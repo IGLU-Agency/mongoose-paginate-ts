@@ -45,28 +45,25 @@ const User: Pagination<User> = mongoose.model<User, Pagination<User>>("User", us
   - `[select]` {Object | String} - Fields to return (by default returns all fields). [Documentation](http://mongoosejs.com/docs/api.html#query_Query-select)
   - `[sort]` {Object | String} - Sort order. [Documentation](http://mongoosejs.com/docs/api.html#query_Query-sort)
   - `[populate]` {Object | String} - Paths which should be populated with other documents. [Documentation](http://mongoosejs.com/docs/api.html#query_Query-populate)
-  - `[page=1]` {Number}, **if undefined, will return all docs without pagination**
+  - `[page=1]` {Number}, 
   - `[limit=10]` {Number}, number of docs per page, default is 10
 - `[callback(err, result)]` - If specified the callback is called once pagination results are retrieved or when an error has occurred
 
 #### Return value
 
-Promise fulfilled with an IPaginateResult:
+Promise fulfilled with an Pagination:
 
 ```ts
-interface IPaginateResult<T> {
-  data: T[];
-  pagination: IPagination;
-}
-
-interface IPagination {
+interface Pagination {
+  docs: T[];
   hasPrevPage: boolean;
   hasNextPage: boolean;
   prevPage: number | null;
   nextPage: number | null;
   limit: number;
-  page?: number | null;
-  totalPages?: number;
+  pagingCounter: number;
+  page: number | null;
+  totalPages: number;
 }
 ```
 
