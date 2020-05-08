@@ -1,5 +1,5 @@
-import { Schema } from "mongoose";
-import mongoose, { Model } from "mongoose";
+import * as mongoose from 'mongoose';
+import { Schema, Model } from "mongoose";
 export interface Pagination<T extends mongoose.Document> extends Model<T> {
     paginate(options?: any | undefined, callback?: Function | undefined): void;
 }
