@@ -10,12 +10,6 @@ Typescript pagination plugin for [Mongoose](http://mongoosejs.com)
 npm install mongoose-pagination-ts
 ```
 
-or
-
-```sh
-yarn add mongoose-pagination-ts
-```
-
 ## Usage
 
 Add plugin for a mongoose schema to inject a `paginate` method for pagination:
