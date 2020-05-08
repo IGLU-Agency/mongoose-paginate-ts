@@ -72,7 +72,7 @@ interface Pagination {
 #### Paginate with
 
 ```ts
-await Model.paginate({}).then(result => {
+Model.paginate({}).then(result => {
   // ...
 });
 ```
