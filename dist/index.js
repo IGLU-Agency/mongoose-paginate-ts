@@ -38,16 +38,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 function mongoosePagination(schema) {
     schema.statics.paginate = function paginate(options, callback) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function () {
-            var query, populate, select, sort, limit, page, skip, countPromise, docsPromise, mQuery, values, count, docs, meta, pages, error_1;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var query, populate, select, sort, forceCountFunction, limit, page, skip, countPromise, docsPromise, mQuery, values, count, docs, meta, pages, error_1;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
                     case 0:
                         query = options.query || {};
                         populate = (_a = options.populate) !== null && _a !== void 0 ? _a : false;
                         select = (_b = options.select) !== null && _b !== void 0 ? _b : '';
                         sort = (_c = options.sort) !== null && _c !== void 0 ? _c : {};
+                        forceCountFunction = (_d = options.forceCountFunction) !== null && _d !== void 0 ? _d : false;
                         limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
                         page = 1;
                         skip = 0;
@@ -55,7 +56,12 @@ function mongoosePagination(schema) {
                             page = parseInt(options.page, 10);
                             skip = (page - 1) * limit;
                         }
-                        countPromise = this.countDocuments(query).exec();
+                        if (forceCountFunction == true) {
+                            countPromise = this.count(query).exec();
+                        }
+                        else {
+                            countPromise = this.countDocuments(query).exec();
+                        }
                         docsPromise = [];
                         mQuery = this.find(query);
                         mQuery.select(select);
@@ -69,12 +75,12 @@ function mongoosePagination(schema) {
                             mQuery.limit(limit);
                         }
                         docsPromise = mQuery.exec();
-                        _d.label = 1;
+                        _e.label = 1;
                     case 1:
-                        _d.trys.push([1, 3, , 4]);
+                        _e.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, Promise.all([countPromise, docsPromise])];
                     case 2:
-                        values = _d.sent();
+                        values = _e.sent();
                         count = values[0], docs = values[1];
                         meta = {
                             'totalDocs': count
@@ -127,7 +133,7 @@ function mongoosePagination(schema) {
                         }
                         return [3 /*break*/, 4];
                     case 3:
-                        error_1 = _d.sent();
+                        error_1 = _e.sent();
                         if (callback != undefined) {
                             callback(error_1);
                         }

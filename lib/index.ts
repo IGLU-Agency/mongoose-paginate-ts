@@ -11,6 +11,7 @@ export function mongoosePagination(schema: Schema) {
     let populate = options.populate ?? false
     let select = options.select ?? ''
     let sort = options.sort ?? {}
+    let forceCountFunction = options.forceCountFunction ?? false
     //MARK: PAGING
     const limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
     let page = 1;
@@ -20,7 +21,12 @@ export function mongoosePagination(schema: Schema) {
       skip = (page - 1) * limit;
     }
     //MARK: COUNTING
-    let countPromise = this.countDocuments(query).exec();
+    let countPromise;
+    if (forceCountFunction == true) {
+      countPromise = this.count(query).exec();
+    } else {
+      countPromise = this.countDocuments(query).exec();
+    }
     //MARK: QUERY
     let docsPromise = [];
     const mQuery = this.find(query);
