@@ -38,17 +38,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 function mongoosePagination(schema) {
     schema.statics.paginate = function paginate(options, callback) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function () {
-            var query, populate, select, sort, pagination, limit, page, skip, countPromise, docsPromise, mQuery, values, count, docs, meta, pages, error_1;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            var query, populate, select, sort, limit, page, skip, countPromise, docsPromise, mQuery, values, count, docs, meta, pages, error_1;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         query = options.query || {};
                         populate = (_a = options.populate) !== null && _a !== void 0 ? _a : false;
                         select = (_b = options.select) !== null && _b !== void 0 ? _b : '';
                         sort = (_c = options.sort) !== null && _c !== void 0 ? _c : {};
-                        pagination = (_d = options.pagination) !== null && _d !== void 0 ? _d : true;
                         limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
                         page = 1;
                         skip = 0;
@@ -58,26 +57,24 @@ function mongoosePagination(schema) {
                         }
                         countPromise = this.countDocuments(query).exec();
                         docsPromise = [];
-                        if (limit) {
-                            mQuery = this.find(query);
-                            mQuery.select(select);
-                            mQuery.sort(sort);
-                            mQuery.lean();
-                            if (populate) {
-                                mQuery.populate(populate);
-                            }
-                            if (pagination) {
-                                mQuery.skip(skip);
-                                mQuery.limit(limit);
-                            }
-                            docsPromise = mQuery.exec();
+                        mQuery = this.find(query);
+                        mQuery.select(select);
+                        mQuery.sort(sort);
+                        mQuery.lean();
+                        if (populate) {
+                            mQuery.populate(populate);
                         }
-                        _e.label = 1;
+                        if (limit > 0) {
+                            mQuery.skip(skip);
+                            mQuery.limit(limit);
+                        }
+                        docsPromise = mQuery.exec();
+                        _d.label = 1;
                     case 1:
-                        _e.trys.push([1, 3, , 4]);
+                        _d.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, Promise.all([countPromise, docsPromise])];
                     case 2:
-                        values = _e.sent();
+                        values = _d.sent();
                         count = values[0], docs = values[1];
                         meta = {
                             'totalDocs': count
@@ -91,7 +88,7 @@ function mongoosePagination(schema) {
                         meta['hasNextPage'] = false;
                         meta['prevPage'] = null;
                         meta['nextPage'] = null;
-                        if (pagination) {
+                        if (limit > 0) {
                             meta['limit'] = limit;
                             meta['totalPages'] = pages;
                             // Set prev page
@@ -130,7 +127,7 @@ function mongoosePagination(schema) {
                         }
                         return [3 /*break*/, 4];
                     case 3:
-                        error_1 = _e.sent();
+                        error_1 = _d.sent();
                         if (callback != undefined) {
                             callback(error_1);
                         }

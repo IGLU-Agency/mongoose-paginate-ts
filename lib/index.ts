@@ -11,7 +11,6 @@ export function mongoosePagination(schema: Schema) {
     let populate = options.populate ?? false
     let select = options.select ?? ''
     let sort = options.sort ?? {}
-    let pagination = options.pagination ?? true
     //MARK: PAGING
     const limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
     let page = 1;
@@ -24,20 +23,18 @@ export function mongoosePagination(schema: Schema) {
     let countPromise = this.countDocuments(query).exec();
     //MARK: QUERY
     let docsPromise = [];
-    if (limit) {
-      const mQuery = this.find(query);
-      mQuery.select(select);
-      mQuery.sort(sort);
-      mQuery.lean();
-      if (populate) {
-        mQuery.populate(populate);
-      }
-      if (pagination) {
-        mQuery.skip(skip);
-        mQuery.limit(limit);
-      }
-      docsPromise = mQuery.exec();
+    const mQuery = this.find(query);
+    mQuery.select(select);
+    mQuery.sort(sort);
+    mQuery.lean();
+    if (populate) {
+      mQuery.populate(populate);
     }
+    if (limit > 0) {
+      mQuery.skip(skip);
+      mQuery.limit(limit);
+    }
+    docsPromise = mQuery.exec();
     //MARK: PERFORM
     try {
       let values = await Promise.all([countPromise, docsPromise]);
@@ -54,7 +51,7 @@ export function mongoosePagination(schema: Schema) {
       meta['hasNextPage'] = false;
       meta['prevPage'] = null;
       meta['nextPage'] = null;
-      if (pagination) {
+      if (limit > 0) {
         meta['limit'] = limit;
         meta['totalPages'] = pages;
         // Set prev page
