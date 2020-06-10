@@ -51,16 +51,17 @@ const User: Pagination<User> = mongoose.model<User, Pagination<User>>("User", us
 Promise fulfilled with an Pagination:
 
 ```ts
-interface Pagination {
-  docs: T[];
-  hasPrevPage: boolean;
-  hasNextPage: boolean;
-  prevPage: number | null;
-  nextPage: number | null;
-  limit: number;
-  pagingCounter: number;
-  page: number | null;
-  totalPages: number;
+class PaginationModel {
+  totalDocs: number | undefined;
+  limit: number | undefined;
+  totalPages: number | undefined;
+  page: number | undefined;
+  pagingCounter: number | undefined;
+  hasPrevPage: Boolean | undefined;
+  hasNextPage: Boolean | undefined;
+  prevPage: number | undefined;
+  nextPage: number | undefined;
+  docs: any[] | undefined;
 }
 ```
 
@@ -72,6 +73,8 @@ interface Pagination {
 User.paginate({}).then((error: Error, result: any) => {
   // ...
 });
+
+var results = await User.paginate({})
 ```
 
 #### More advanced example
@@ -88,6 +91,8 @@ var options = {
 User.paginate(options).then((error: Error, result: any) => {
   // ...
 });
+
+var results = await User.paginate(options)
 ```
 
 ## License

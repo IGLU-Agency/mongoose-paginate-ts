@@ -36,6 +36,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var PaginationModel = /** @class */ (function () {
+    function PaginationModel() {
+    }
+    return PaginationModel;
+}());
+exports.PaginationModel = PaginationModel;
 function mongoosePagination(schema) {
     schema.statics.paginate = function paginate(options, callback) {
         var _a, _b, _c, _d;
@@ -82,62 +88,61 @@ function mongoosePagination(schema) {
                     case 2:
                         values = _e.sent();
                         count = values[0], docs = values[1];
-                        meta = {
-                            'totalDocs': count
-                        };
+                        meta = new PaginationModel;
+                        meta.totalDocs = count;
                         pages = (limit > 0) ? (Math.ceil(count / limit) || 1) : 0;
-                        meta['limit'] = count;
-                        meta['totalPages'] = 1;
-                        meta['page'] = page;
-                        meta['pagingCounter'] = ((page - 1) * limit) + 1;
-                        meta['hasPrevPage'] = false;
-                        meta['hasNextPage'] = false;
-                        meta['prevPage'] = null;
-                        meta['nextPage'] = null;
+                        meta.limit = count;
+                        meta.totalPages = 1;
+                        meta.page = page;
+                        meta.pagingCounter = ((page - 1) * limit) + 1;
+                        meta.hasPrevPage = false;
+                        meta.hasNextPage = false;
+                        meta.prevPage = undefined;
+                        meta.nextPage = undefined;
                         if (limit > 0) {
-                            meta['limit'] = limit;
-                            meta['totalPages'] = pages;
+                            meta.limit = limit;
+                            meta.totalPages = pages;
                             // Set prev page
                             if (page > 1) {
-                                meta['hasPrevPage'] = true;
-                                meta['prevPage'] = (page - 1);
+                                meta.hasPrevPage = true;
+                                meta.prevPage = (page - 1);
                             }
                             else if (page == 1) {
-                                meta['prevPage'] = null;
+                                meta.prevPage = undefined;
                             }
                             else {
-                                meta['prevPage'] = null;
+                                meta.prevPage = undefined;
                             }
                             // Set next page
                             if (page < pages) {
-                                meta['hasNextPage'] = true;
-                                meta['nextPage'] = (page + 1);
+                                meta.hasNextPage = true;
+                                meta.nextPage = (page + 1);
                             }
                             else {
-                                meta['nextPage'] = null;
+                                meta.nextPage = undefined;
                             }
                         }
                         if (limit == 0) {
-                            meta['limit'] = 0;
-                            meta['totalPages'] = null;
-                            meta['page'] = null;
-                            meta['pagingCounter'] = null;
-                            meta['prevPage'] = null;
-                            meta['nextPage'] = null;
-                            meta['hasPrevPage'] = false;
-                            meta['hasNextPage'] = false;
+                            meta.limit = 0;
+                            meta.totalPages = undefined;
+                            meta.page = undefined;
+                            meta.pagingCounter = undefined;
+                            meta.prevPage = undefined;
+                            meta.nextPage = undefined;
+                            meta.hasPrevPage = false;
+                            meta.hasNextPage = false;
                         }
                         meta['docs'] = docs;
                         if (callback != undefined) {
                             callback(null, meta);
                         }
-                        return [3 /*break*/, 4];
+                        return [2 /*return*/, meta];
                     case 3:
                         error_1 = _e.sent();
                         if (callback != undefined) {
                             callback(error_1);
                         }
-                        return [3 /*break*/, 4];
+                        return [2 /*return*/, undefined];
                     case 4: return [2 /*return*/];
                 }
             });
