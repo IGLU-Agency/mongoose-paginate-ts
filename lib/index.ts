@@ -15,7 +15,7 @@ export class PaginationModel {
 }
 
 export interface Pagination<T extends mongoose.Document> extends Model<T> {
-  paginate(options?: any | undefined, callback?: Function | undefined): void
+  paginate(options?: any | undefined, callback?: Function | undefined): Promise<PaginationModel | undefined>
 }
 export function mongoosePagination(schema: Schema) {
   schema.statics.paginate = async function paginate(options: any | undefined, callback: Function | undefined): Promise<PaginationModel | undefined> {
