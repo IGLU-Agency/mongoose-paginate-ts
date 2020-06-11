@@ -53,15 +53,15 @@ Promise fulfilled with an Pagination:
 ```ts
 class PaginationModel {
   totalDocs: number | undefined;
-  limit: number | undefined;
+  limit: number = 0;
   totalPages: number | undefined;
   page: number | undefined;
   pagingCounter: number | undefined;
-  hasPrevPage: Boolean | undefined;
-  hasNextPage: Boolean | undefined;
+  hasPrevPage: Boolean = false;
+  hasNextPage: Boolean = false;
   prevPage: number | undefined;
   nextPage: number | undefined;
-  docs: any[] | undefined;
+  docs: any[] = [];
 }
 ```
 

@@ -3,15 +3,15 @@ import { Schema, Model } from "mongoose";
 
 export class PaginationModel {
   totalDocs: number | undefined;
-  limit: number | undefined;
+  limit: number = 0;
   totalPages: number | undefined;
   page: number | undefined;
   pagingCounter: number | undefined;
-  hasPrevPage: Boolean | undefined;
-  hasNextPage: Boolean | undefined;
+  hasPrevPage: Boolean = false;
+  hasNextPage: Boolean = false;
   prevPage: number | undefined;
   nextPage: number | undefined;
-  docs: any[] | undefined;
+  docs: any[] = [];
 }
 
 export interface Pagination<T extends mongoose.Document> extends Model<T> {
@@ -102,7 +102,7 @@ export function mongoosePagination(schema: Schema) {
         meta.hasPrevPage = false;
         meta.hasNextPage = false;
       }
-      meta['docs'] = docs
+      meta.docs = docs
       if (callback != undefined) {
         callback(null, meta);
       }

@@ -38,6 +38,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var PaginationModel = /** @class */ (function () {
     function PaginationModel() {
+        this.limit = 0;
+        this.hasPrevPage = false;
+        this.hasNextPage = false;
+        this.docs = [];
     }
     return PaginationModel;
 }());
@@ -132,7 +136,7 @@ function mongoosePagination(schema) {
                             meta.hasPrevPage = false;
                             meta.hasNextPage = false;
                         }
-                        meta['docs'] = docs;
+                        meta.docs = docs;
                         if (callback != undefined) {
                             callback(null, meta);
                         }
