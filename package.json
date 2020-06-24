@@ -1,6 +1,6 @@
 {
   "name": "mongoose-paginate-ts",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Typescript pagination plugin for mongoose",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,9 +33,9 @@
   },
   "homepage": "https://github.com/lucaiaconelli/mongoose-paginate-ts#readme",
   "dependencies": {
-    "@types/mongoose": "^5.7.13",
-    "mongoose": "^5.9.10",
-    "typescript": "latest"
+    "@types/mongoose": "^5.7.27",
+    "mongoose": "^5.9.20",
+    "typescript": "^3.9.5"
   },
   "directories": {
     "lib": "lib"
