@@ -24,6 +24,7 @@ export function mongoosePagination(schema: Schema) {
     let populate = options.populate ?? false
     let select = options.select ?? ''
     let sort = options.sort ?? {}
+    let projection = options.projection ?? {}
     let forceCountFunction = options.forceCountFunction ?? false
     //MARK: PAGING
     const limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
@@ -42,7 +43,7 @@ export function mongoosePagination(schema: Schema) {
     }
     //MARK: QUERY
     let docsPromise = [];
-    const mQuery = this.find(query);
+    const mQuery = this.find(query, projection);
     mQuery.select(select);
     mQuery.sort(sort);
     mQuery.lean();

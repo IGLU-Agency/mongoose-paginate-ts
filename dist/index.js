@@ -48,17 +48,18 @@ var PaginationModel = /** @class */ (function () {
 exports.PaginationModel = PaginationModel;
 function mongoosePagination(schema) {
     schema.statics.paginate = function paginate(options, callback) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e;
         return __awaiter(this, void 0, void 0, function () {
-            var query, populate, select, sort, forceCountFunction, limit, page, skip, countPromise, docsPromise, mQuery, values, count, docs, meta, pages, error_1;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            var query, populate, select, sort, projection, forceCountFunction, limit, page, skip, countPromise, docsPromise, mQuery, values, count, docs, meta, pages, error_1;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
                     case 0:
                         query = options.query || {};
                         populate = (_a = options.populate) !== null && _a !== void 0 ? _a : false;
                         select = (_b = options.select) !== null && _b !== void 0 ? _b : '';
                         sort = (_c = options.sort) !== null && _c !== void 0 ? _c : {};
-                        forceCountFunction = (_d = options.forceCountFunction) !== null && _d !== void 0 ? _d : false;
+                        projection = (_d = options.projection) !== null && _d !== void 0 ? _d : {};
+                        forceCountFunction = (_e = options.forceCountFunction) !== null && _e !== void 0 ? _e : false;
                         limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
                         page = 1;
                         skip = 0;
@@ -73,7 +74,7 @@ function mongoosePagination(schema) {
                             countPromise = this.countDocuments(query).exec();
                         }
                         docsPromise = [];
-                        mQuery = this.find(query);
+                        mQuery = this.find(query, projection);
                         mQuery.select(select);
                         mQuery.sort(sort);
                         mQuery.lean();
@@ -85,12 +86,12 @@ function mongoosePagination(schema) {
                             mQuery.limit(limit);
                         }
                         docsPromise = mQuery.exec();
-                        _e.label = 1;
+                        _f.label = 1;
                     case 1:
-                        _e.trys.push([1, 3, , 4]);
+                        _f.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, Promise.all([countPromise, docsPromise])];
                     case 2:
-                        values = _e.sent();
+                        values = _f.sent();
                         count = values[0], docs = values[1];
                         meta = new PaginationModel;
                         meta.totalDocs = count;
@@ -142,7 +143,7 @@ function mongoosePagination(schema) {
                         }
                         return [2 /*return*/, meta];
                     case 3:
-                        error_1 = _e.sent();
+                        error_1 = _f.sent();
                         if (callback != undefined) {
                             callback(error_1);
                         }
