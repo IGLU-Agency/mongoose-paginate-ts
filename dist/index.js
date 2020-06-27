@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.mongoosePagination = exports.PaginationModel = void 0;
 var PaginationModel = /** @class */ (function () {
     function PaginationModel() {
         this.limit = 0;
