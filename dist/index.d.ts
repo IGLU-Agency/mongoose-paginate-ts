@@ -2,12 +2,12 @@ import * as mongoose from 'mongoose';
 import { Schema, Model } from "mongoose";
 export declare class PaginationModel {
     totalDocs: number | undefined;
-    limit: number;
+    limit: number | undefined;
     totalPages: number | undefined;
     page: number | undefined;
     pagingCounter: number | undefined;
-    hasPrevPage: Boolean;
-    hasNextPage: Boolean;
+    hasPrevPage: Boolean | undefined;
+    hasNextPage: Boolean | undefined;
     prevPage: number | undefined;
     nextPage: number | undefined;
     docs: any[];

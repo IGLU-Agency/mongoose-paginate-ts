@@ -49,24 +49,43 @@ var PaginationModel = /** @class */ (function () {
 exports.PaginationModel = PaginationModel;
 function mongoosePagination(schema) {
     schema.statics.paginate = function paginate(options, callback) {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c, _d, _e, _f, _g;
         return __awaiter(this, void 0, void 0, function () {
-            var query, populate, select, sort, projection, forceCountFunction, limit, page, skip, countPromise, docsPromise, mQuery, values, count, docs, meta, pages, error_1;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
+            var key, query, populate, select, sort, projection, forceCountFunction, startingAfter, endingBefore, limit, page, skip, useCursor, countPromise, docsPromise, mQuery, values, count, docs, meta, pages, hasMore, error_1;
+            return __generator(this, function (_h) {
+                switch (_h.label) {
                     case 0:
+                        key = options.key || '_id';
                         query = options.query || {};
                         populate = (_a = options.populate) !== null && _a !== void 0 ? _a : false;
                         select = (_b = options.select) !== null && _b !== void 0 ? _b : '';
                         sort = (_c = options.sort) !== null && _c !== void 0 ? _c : {};
                         projection = (_d = options.projection) !== null && _d !== void 0 ? _d : {};
                         forceCountFunction = (_e = options.forceCountFunction) !== null && _e !== void 0 ? _e : false;
+                        startingAfter = (_f = options.startingAfter) !== null && _f !== void 0 ? _f : undefined;
+                        endingBefore = (_g = options.endingBefore) !== null && _g !== void 0 ? _g : undefined;
                         limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
                         page = 1;
                         skip = 0;
                         if (options.hasOwnProperty('page')) {
                             page = parseInt(options.page, 10);
                             skip = (page - 1) * limit;
+                        }
+                        useCursor = false;
+                        if (startingAfter != undefined || endingBefore != undefined) {
+                            useCursor = true;
+                            query[key] = {};
+                            if (endingBefore != undefined) {
+                                if (startingAfter != undefined) {
+                                    query[key] = { $gt: startingAfter, $lt: endingBefore };
+                                }
+                                else {
+                                    query[key] = { $lt: endingBefore };
+                                }
+                            }
+                            else {
+                                query[key] = { $gt: startingAfter };
+                            }
                         }
                         if (forceCountFunction == true) {
                             countPromise = this.count(query).exec();
@@ -83,60 +102,81 @@ function mongoosePagination(schema) {
                             mQuery.populate(populate);
                         }
                         if (limit > 0) {
-                            mQuery.skip(skip);
-                            mQuery.limit(limit);
+                            if (useCursor) {
+                                mQuery.limit(limit + 1);
+                            }
+                            else {
+                                mQuery.skip(skip);
+                                mQuery.limit(limit);
+                            }
                         }
                         docsPromise = mQuery.exec();
-                        _f.label = 1;
+                        _h.label = 1;
                     case 1:
-                        _f.trys.push([1, 3, , 4]);
+                        _h.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, Promise.all([countPromise, docsPromise])];
                     case 2:
-                        values = _f.sent();
+                        values = _h.sent();
                         count = values[0], docs = values[1];
                         meta = new PaginationModel;
                         meta.totalDocs = count;
-                        pages = (limit > 0) ? (Math.ceil(count / limit) || 1) : 0;
-                        meta.limit = count;
-                        meta.totalPages = 1;
-                        meta.page = page;
-                        meta.pagingCounter = ((page - 1) * limit) + 1;
-                        meta.hasPrevPage = false;
-                        meta.hasNextPage = false;
-                        meta.prevPage = undefined;
-                        meta.nextPage = undefined;
-                        if (limit > 0) {
-                            meta.limit = limit;
-                            meta.totalPages = pages;
-                            // Set prev page
-                            if (page > 1) {
-                                meta.hasPrevPage = true;
-                                meta.prevPage = (page - 1);
+                        if (!useCursor) {
+                            pages = (limit > 0) ? (Math.ceil(count / limit) || 1) : 0;
+                            meta.limit = count;
+                            meta.totalPages = 1;
+                            meta.page = page;
+                            meta.pagingCounter = ((page - 1) * limit) + 1;
+                            meta.hasPrevPage = false;
+                            meta.hasNextPage = false;
+                            meta.prevPage = undefined;
+                            meta.nextPage = undefined;
+                            if (limit > 0) {
+                                meta.limit = limit;
+                                meta.totalPages = pages;
+                                // Set prev page
+                                if (page > 1) {
+                                    meta.hasPrevPage = true;
+                                    meta.prevPage = (page - 1);
+                                }
+                                else if (page == 1) {
+                                    meta.prevPage = undefined;
+                                }
+                                else {
+                                    meta.prevPage = undefined;
+                                }
+                                // Set next page
+                                if (page < pages) {
+                                    meta.hasNextPage = true;
+                                    meta.nextPage = (page + 1);
+                                }
+                                else {
+                                    meta.nextPage = undefined;
+                                }
                             }
-                            else if (page == 1) {
+                            if (limit == 0) {
+                                meta.limit = 0;
+                                meta.totalPages = undefined;
+                                meta.page = undefined;
+                                meta.pagingCounter = undefined;
                                 meta.prevPage = undefined;
-                            }
-                            else {
-                                meta.prevPage = undefined;
-                            }
-                            // Set next page
-                            if (page < pages) {
-                                meta.hasNextPage = true;
-                                meta.nextPage = (page + 1);
-                            }
-                            else {
                                 meta.nextPage = undefined;
+                                meta.hasPrevPage = false;
+                                meta.hasNextPage = false;
                             }
                         }
-                        if (limit == 0) {
-                            meta.limit = 0;
+                        else {
+                            meta.limit = undefined;
                             meta.totalPages = undefined;
                             meta.page = undefined;
                             meta.pagingCounter = undefined;
+                            meta.hasPrevPage = undefined;
+                            hasMore = docs.length === limit + 1;
+                            if (hasMore) {
+                                docs.pop();
+                            }
+                            meta.hasNextPage = hasMore;
                             meta.prevPage = undefined;
                             meta.nextPage = undefined;
-                            meta.hasPrevPage = false;
-                            meta.hasNextPage = false;
                         }
                         meta.docs = docs;
                         if (callback != undefined) {
@@ -144,7 +184,7 @@ function mongoosePagination(schema) {
                         }
                         return [2 /*return*/, meta];
                     case 3:
-                        error_1 = _f.sent();
+                        error_1 = _h.sent();
                         if (callback != undefined) {
                             callback(error_1);
                         }

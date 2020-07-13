@@ -2,7 +2,7 @@
 
 # mongoose-paginate-ts
 
-Typescript pagination plugin for [Mongoose](http://mongoosejs.com)
+Typescript pagination (with page or cursor) plugin for [Mongoose](http://mongoosejs.com)
 
 [![NPM](https://nodei.co/npm/mongoose-paginate-ts.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/mongoose-paginate-ts)
 
@@ -43,6 +43,9 @@ const User: Pagination<User> = mongoose.model<User, Pagination<User>>("User", us
   - `[populate]` {Object | String} - Paths which should be populated with other documents. [Documentation](http://mongoosejs.com/docs/api.html#query_Query-populate)
   - `[page=1]` {Number}, 
   - `[limit=10]` {Number}, number of docs per page, default is 10
+  - `[key=_id]` {String}, cursor id pagination 
+  - `[startingAfter]` {String}, A cursor for use in pagination. startingAfter is an object ID that defines your place in the list
+  - `[endingBefore]` {String}, A cursor for use in pagination. endingBefore is an object ID that defines your place in the list.
   - `[forceCountFunction=false]` {Boolean} - Set this to true, if you need to support $geo queries.
 - `[callback(err, result)]` - The callback is called once pagination results are retrieved or when an error has occurred
 
