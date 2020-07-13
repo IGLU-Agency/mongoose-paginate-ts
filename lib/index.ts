@@ -11,6 +11,7 @@ export class PaginationModel {
   hasNextPage: Boolean | undefined = false;
   prevPage: number | undefined;
   nextPage: number | undefined;
+  hasMore: Boolean | undefined = false;
   docs: any[] = [];
 }
 
@@ -42,11 +43,7 @@ export function mongoosePagination(schema: Schema) {
       useCursor = true
       query[key] = {};
       if (endingBefore != undefined) {
-        if (startingAfter != undefined) {
-          query[key] = { $gt: startingAfter, $lt: endingBefore };
-        } else {
-          query[key] = { $lt: endingBefore };
-        }
+        query[key] = { $lt: endingBefore };
       } else {
         query[key] = { $gt: startingAfter };
       }
@@ -131,11 +128,12 @@ export function mongoosePagination(schema: Schema) {
         meta.page = undefined;
         meta.pagingCounter = undefined;
         meta.hasPrevPage = undefined;
+        meta.hasNextPage = undefined;
         const hasMore = docs.length === limit + 1;
         if (hasMore) {
           docs.pop();
         }
-        meta.hasNextPage = hasMore;
+        meta.hasMore = hasMore;
         meta.prevPage = undefined;
         meta.nextPage = undefined;
       }

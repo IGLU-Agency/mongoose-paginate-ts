@@ -42,6 +42,7 @@ var PaginationModel = /** @class */ (function () {
         this.limit = 0;
         this.hasPrevPage = false;
         this.hasNextPage = false;
+        this.hasMore = false;
         this.docs = [];
     }
     return PaginationModel;
@@ -76,12 +77,7 @@ function mongoosePagination(schema) {
                             useCursor = true;
                             query[key] = {};
                             if (endingBefore != undefined) {
-                                if (startingAfter != undefined) {
-                                    query[key] = { $gt: startingAfter, $lt: endingBefore };
-                                }
-                                else {
-                                    query[key] = { $lt: endingBefore };
-                                }
+                                query[key] = { $lt: endingBefore };
                             }
                             else {
                                 query[key] = { $gt: startingAfter };
@@ -170,11 +166,12 @@ function mongoosePagination(schema) {
                             meta.page = undefined;
                             meta.pagingCounter = undefined;
                             meta.hasPrevPage = undefined;
+                            meta.hasNextPage = undefined;
                             hasMore = docs.length === limit + 1;
                             if (hasMore) {
                                 docs.pop();
                             }
-                            meta.hasNextPage = hasMore;
+                            meta.hasMore = hasMore;
                             meta.prevPage = undefined;
                             meta.nextPage = undefined;
                         }

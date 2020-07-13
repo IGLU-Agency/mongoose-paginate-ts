@@ -10,6 +10,7 @@ export declare class PaginationModel {
     hasNextPage: Boolean | undefined;
     prevPage: number | undefined;
     nextPage: number | undefined;
+    hasMore: Boolean | undefined;
     docs: any[];
 }
 export interface Pagination<T extends mongoose.Document> extends Model<T> {
