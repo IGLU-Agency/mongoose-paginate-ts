@@ -8,187 +8,155 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mongoosePagination = exports.PaginationModel = void 0;
-var PaginationModel = /** @class */ (function () {
-    function PaginationModel() {
+class PaginationModel {
+    constructor() {
         this.limit = 0;
         this.hasPrevPage = false;
         this.hasNextPage = false;
         this.hasMore = false;
         this.docs = [];
     }
-    return PaginationModel;
-}());
+}
 exports.PaginationModel = PaginationModel;
 function mongoosePagination(schema) {
     schema.statics.paginate = function paginate(options, callback) {
         var _a, _b, _c, _d, _e, _f, _g;
-        return __awaiter(this, void 0, void 0, function () {
-            var key, query, populate, select, sort, projection, forceCountFunction, startingAfter, endingBefore, limit, page, skip, useCursor, countPromise, docsPromise, mQuery, values, count, docs, meta, pages, hasMore, error_1;
-            return __generator(this, function (_h) {
-                switch (_h.label) {
-                    case 0:
-                        key = options.key || '_id';
-                        query = options.query || {};
-                        populate = (_a = options.populate) !== null && _a !== void 0 ? _a : false;
-                        select = (_b = options.select) !== null && _b !== void 0 ? _b : '';
-                        sort = (_c = options.sort) !== null && _c !== void 0 ? _c : {};
-                        projection = (_d = options.projection) !== null && _d !== void 0 ? _d : {};
-                        forceCountFunction = (_e = options.forceCountFunction) !== null && _e !== void 0 ? _e : false;
-                        startingAfter = (_f = options.startingAfter) !== null && _f !== void 0 ? _f : undefined;
-                        endingBefore = (_g = options.endingBefore) !== null && _g !== void 0 ? _g : undefined;
-                        limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
-                        page = 1;
-                        skip = 0;
-                        if (options.hasOwnProperty('page')) {
-                            page = parseInt(options.page, 10);
-                            skip = (page - 1) * limit;
-                        }
-                        useCursor = false;
-                        if (startingAfter != undefined || endingBefore != undefined) {
-                            useCursor = true;
-                            query[key] = {};
-                            if (endingBefore != undefined) {
-                                query[key] = { $lt: endingBefore };
-                            }
-                            else {
-                                query[key] = { $gt: startingAfter };
-                            }
-                        }
-                        if (forceCountFunction == true) {
-                            countPromise = this.count(query).exec();
-                        }
-                        else {
-                            countPromise = this.countDocuments(query).exec();
-                        }
-                        docsPromise = [];
-                        mQuery = this.find(query, projection);
-                        mQuery.select(select);
-                        mQuery.sort(sort);
-                        mQuery.lean();
-                        if (populate) {
-                            mQuery.populate(populate);
-                        }
-                        if (limit > 0) {
-                            if (useCursor) {
-                                mQuery.limit(limit + 1);
-                            }
-                            else {
-                                mQuery.skip(skip);
-                                mQuery.limit(limit);
-                            }
-                        }
-                        docsPromise = mQuery.exec();
-                        _h.label = 1;
-                    case 1:
-                        _h.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, Promise.all([countPromise, docsPromise])];
-                    case 2:
-                        values = _h.sent();
-                        count = values[0], docs = values[1];
-                        meta = new PaginationModel;
-                        meta.totalDocs = count;
-                        if (!useCursor) {
-                            pages = (limit > 0) ? (Math.ceil(count / limit) || 1) : 0;
-                            meta.limit = count;
-                            meta.totalPages = 1;
-                            meta.page = page;
-                            meta.pagingCounter = ((page - 1) * limit) + 1;
-                            meta.hasPrevPage = false;
-                            meta.hasNextPage = false;
-                            meta.prevPage = undefined;
-                            meta.nextPage = undefined;
-                            if (limit > 0) {
-                                meta.limit = limit;
-                                meta.totalPages = pages;
-                                // Set prev page
-                                if (page > 1) {
-                                    meta.hasPrevPage = true;
-                                    meta.prevPage = (page - 1);
-                                }
-                                else if (page == 1) {
-                                    meta.prevPage = undefined;
-                                }
-                                else {
-                                    meta.prevPage = undefined;
-                                }
-                                // Set next page
-                                if (page < pages) {
-                                    meta.hasNextPage = true;
-                                    meta.nextPage = (page + 1);
-                                }
-                                else {
-                                    meta.nextPage = undefined;
-                                }
-                            }
-                            if (limit == 0) {
-                                meta.limit = 0;
-                                meta.totalPages = undefined;
-                                meta.page = undefined;
-                                meta.pagingCounter = undefined;
-                                meta.prevPage = undefined;
-                                meta.nextPage = undefined;
-                                meta.hasPrevPage = false;
-                                meta.hasNextPage = false;
-                            }
-                        }
-                        else {
-                            meta.limit = undefined;
-                            meta.totalPages = undefined;
-                            meta.page = undefined;
-                            meta.pagingCounter = undefined;
-                            meta.hasPrevPage = undefined;
-                            meta.hasNextPage = undefined;
-                            hasMore = docs.length === limit + 1;
-                            if (hasMore) {
-                                docs.pop();
-                            }
-                            meta.hasMore = hasMore;
-                            meta.prevPage = undefined;
-                            meta.nextPage = undefined;
-                        }
-                        meta.docs = docs;
-                        if (callback != undefined) {
-                            callback(null, meta);
-                        }
-                        return [2 /*return*/, meta];
-                    case 3:
-                        error_1 = _h.sent();
-                        if (callback != undefined) {
-                            callback(error_1);
-                        }
-                        return [2 /*return*/, undefined];
-                    case 4: return [2 /*return*/];
+        return __awaiter(this, void 0, void 0, function* () {
+            //MARK: INIT
+            let key = options.key || "_id";
+            let query = options.query || {};
+            let populate = (_a = options.populate) !== null && _a !== void 0 ? _a : false;
+            let select = (_b = options.select) !== null && _b !== void 0 ? _b : "";
+            let sort = (_c = options.sort) !== null && _c !== void 0 ? _c : {};
+            let projection = (_d = options.projection) !== null && _d !== void 0 ? _d : {};
+            let forceCountFunction = (_e = options.forceCountFunction) !== null && _e !== void 0 ? _e : false;
+            let startingAfter = (_f = options.startingAfter) !== null && _f !== void 0 ? _f : undefined;
+            let endingBefore = (_g = options.endingBefore) !== null && _g !== void 0 ? _g : undefined;
+            //MARK: PAGING
+            const limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
+            let page = 1;
+            let skip = 0;
+            if (options.hasOwnProperty("page")) {
+                page = parseInt(options.page, 10);
+                skip = (page - 1) * limit;
+            }
+            let useCursor = false;
+            if (startingAfter != undefined || endingBefore != undefined) {
+                useCursor = true;
+                query[key] = {};
+                if (endingBefore != undefined) {
+                    query[key] = { $lt: endingBefore };
                 }
-            });
+                else {
+                    query[key] = { $gt: startingAfter };
+                }
+            }
+            //MARK: COUNTING
+            let countPromise;
+            if (forceCountFunction == true) {
+                countPromise = this.count(query).exec();
+            }
+            else {
+                countPromise = this.countDocuments(query).exec();
+            }
+            //MARK: QUERY
+            let docsPromise = [];
+            const mQuery = this.find(query, projection);
+            mQuery.select(select);
+            mQuery.sort(sort);
+            mQuery.lean({ virtuals: true });
+            if (populate) {
+                mQuery.populate(populate);
+            }
+            if (limit > 0) {
+                if (useCursor) {
+                    mQuery.limit(limit + 1);
+                }
+                else {
+                    mQuery.skip(skip);
+                    mQuery.limit(limit);
+                }
+            }
+            docsPromise = mQuery.exec();
+            //MARK: PERFORM
+            try {
+                let values = yield Promise.all([countPromise, docsPromise]);
+                const [count, docs] = values;
+                const meta = new PaginationModel();
+                meta.totalDocs = count;
+                if (!useCursor) {
+                    const pages = limit > 0 ? Math.ceil(count / limit) || 1 : 0;
+                    meta.limit = count;
+                    meta.totalPages = 1;
+                    meta.page = page;
+                    meta.pagingCounter = (page - 1) * limit + 1;
+                    meta.hasPrevPage = false;
+                    meta.hasNextPage = false;
+                    meta.prevPage = undefined;
+                    meta.nextPage = undefined;
+                    if (limit > 0) {
+                        meta.limit = limit;
+                        meta.totalPages = pages;
+                        // Set prev page
+                        if (page > 1) {
+                            meta.hasPrevPage = true;
+                            meta.prevPage = page - 1;
+                        }
+                        else if (page == 1) {
+                            meta.prevPage = undefined;
+                        }
+                        else {
+                            meta.prevPage = undefined;
+                        }
+                        // Set next page
+                        if (page < pages) {
+                            meta.hasNextPage = true;
+                            meta.nextPage = page + 1;
+                        }
+                        else {
+                            meta.nextPage = undefined;
+                        }
+                    }
+                    if (limit == 0) {
+                        meta.limit = 0;
+                        meta.totalPages = undefined;
+                        meta.page = undefined;
+                        meta.pagingCounter = undefined;
+                        meta.prevPage = undefined;
+                        meta.nextPage = undefined;
+                        meta.hasPrevPage = false;
+                        meta.hasNextPage = false;
+                    }
+                }
+                else {
+                    meta.limit = undefined;
+                    meta.totalPages = undefined;
+                    meta.page = undefined;
+                    meta.pagingCounter = undefined;
+                    meta.hasPrevPage = undefined;
+                    meta.hasNextPage = undefined;
+                    const hasMore = docs.length === limit + 1;
+                    if (hasMore) {
+                        docs.pop();
+                    }
+                    meta.hasMore = hasMore;
+                    meta.prevPage = undefined;
+                    meta.nextPage = undefined;
+                }
+                meta.docs = docs;
+                if (callback != undefined) {
+                    callback(null, meta);
+                }
+                return meta;
+            }
+            catch (error) {
+                if (callback != undefined) {
+                    callback(error);
+                }
+                return undefined;
+            }
         });
     };
 }
