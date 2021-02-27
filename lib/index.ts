@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose"
 import { Schema, Model } from "mongoose"
 
-export class PaginationModel {
+export class PaginationModel<T = {}> {
   totalDocs: number | undefined
   limit: number | undefined = 0
   totalPages: number | undefined
@@ -12,7 +12,7 @@ export class PaginationModel {
   prevPage: number | undefined
   nextPage: number | undefined
   hasMore: Boolean | undefined = false
-  docs: any[] = []
+  docs: T[] = []
 }
 
 export interface Pagination<T extends mongoose.Document> extends Model<T> {
