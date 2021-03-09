@@ -18,7 +18,8 @@ export class PaginationModel<T extends mongoose.Document> {
 export interface Pagination<T extends mongoose.Document> extends Model<T> {
   paginate(options?: any | undefined, callback?: Function | undefined): Promise<PaginationModel<T> | undefined>
 }
-export function mongoosePagination<T extends mongoose.Document>(schema: Schema) {
+
+export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T>) {
   schema.statics.paginate = async function paginate(options: any | undefined, callback: Function | undefined): Promise<PaginationModel<T> | undefined> {
     //MARK: INIT
     let key = options.key ?? "_id"

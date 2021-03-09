@@ -16,4 +16,4 @@ export declare class PaginationModel<T extends mongoose.Document> {
 export interface Pagination<T extends mongoose.Document> extends Model<T> {
     paginate(options?: any | undefined, callback?: Function | undefined): Promise<PaginationModel<T> | undefined>;
 }
-export declare function mongoosePagination<T extends mongoose.Document>(schema: Schema): void;
+export declare function mongoosePagination<T extends mongoose.Document>(schema: Schema<T>): void;
