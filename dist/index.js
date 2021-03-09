@@ -64,13 +64,18 @@ function mongoosePagination(schema) {
             }
             //MARK: QUERY
             let docsPromise = [];
-            const mQuery = this.find(query, projection);
-            mQuery.select(select);
-            mQuery.sort(sort);
-            mQuery.lean({ virtuals: true });
-            if (populate) {
-                mQuery.populate(populate);
+            if (aggregate != undefined) {
+                var mQuery = this.aggregate(aggregate);
             }
+            else {
+                var mQuery = this.find(query, projection);
+                mQuery.select(select);
+                mQuery.lean({ virtuals: true });
+                if (populate) {
+                    mQuery.populate(populate);
+                }
+            }
+            mQuery.sort(sort);
             if (limit > 0) {
                 if (useCursor) {
                     mQuery.limit(limit + 1);
