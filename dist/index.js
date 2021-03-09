@@ -22,18 +22,19 @@ class PaginationModel {
 exports.PaginationModel = PaginationModel;
 function mongoosePagination(schema) {
     schema.statics.paginate = function paginate(options, callback) {
-        var _a, _b, _c, _d, _e, _f, _g;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
         return __awaiter(this, void 0, void 0, function* () {
             //MARK: INIT
-            let key = options.key || "_id";
-            let query = options.query || {};
-            let populate = (_a = options.populate) !== null && _a !== void 0 ? _a : false;
-            let select = (_b = options.select) !== null && _b !== void 0 ? _b : "";
-            let sort = (_c = options.sort) !== null && _c !== void 0 ? _c : {};
-            let projection = (_d = options.projection) !== null && _d !== void 0 ? _d : {};
-            let forceCountFunction = (_e = options.forceCountFunction) !== null && _e !== void 0 ? _e : false;
-            let startingAfter = (_f = options.startingAfter) !== null && _f !== void 0 ? _f : undefined;
-            let endingBefore = (_g = options.endingBefore) !== null && _g !== void 0 ? _g : undefined;
+            let key = (_a = options.key) !== null && _a !== void 0 ? _a : "_id";
+            let query = (_b = options.query) !== null && _b !== void 0 ? _b : {};
+            let aggregate = (_c = options.aggregate) !== null && _c !== void 0 ? _c : undefined;
+            let populate = (_d = options.populate) !== null && _d !== void 0 ? _d : false;
+            let select = (_e = options.select) !== null && _e !== void 0 ? _e : "";
+            let sort = (_f = options.sort) !== null && _f !== void 0 ? _f : {};
+            let projection = (_g = options.projection) !== null && _g !== void 0 ? _g : {};
+            let forceCountFunction = (_h = options.forceCountFunction) !== null && _h !== void 0 ? _h : false;
+            let startingAfter = (_j = options.startingAfter) !== null && _j !== void 0 ? _j : undefined;
+            let endingBefore = (_k = options.endingBefore) !== null && _k !== void 0 ? _k : undefined;
             //MARK: PAGING
             const limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
             let page = 1;
@@ -87,7 +88,7 @@ function mongoosePagination(schema) {
                 const meta = new PaginationModel();
                 meta.totalDocs = count;
                 if (!useCursor) {
-                    const pages = limit > 0 ? Math.ceil(count / limit) || 1 : 0;
+                    const pages = limit > 0 ? (_l = Math.ceil(count / limit)) !== null && _l !== void 0 ? _l : 1 : 0;
                     meta.limit = count;
                     meta.totalPages = 1;
                     meta.page = page;

@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose"
 import { Schema, Model } from "mongoose"
 
-export class PaginationModel {
+export class PaginationModel<T extends mongoose.Document> {
   totalDocs: number | undefined
   limit: number | undefined = 0
   totalPages: number | undefined
@@ -12,17 +12,18 @@ export class PaginationModel {
   prevPage: number | undefined
   nextPage: number | undefined
   hasMore: Boolean | undefined = false
-  docs: any[] = []
+  docs: T[] = []
 }
 
 export interface Pagination<T extends mongoose.Document> extends Model<T> {
-  paginate(options?: any | undefined, callback?: Function | undefined): Promise<PaginationModel | undefined>
+  paginate(options?: any | undefined, callback?: Function | undefined): Promise<PaginationModel<T> | undefined>
 }
-export function mongoosePagination(schema: Schema) {
-  schema.statics.paginate = async function paginate(options: any | undefined, callback: Function | undefined): Promise<PaginationModel | undefined> {
+export function mongoosePagination<T extends mongoose.Document>(schema: Schema) {
+  schema.statics.paginate = async function paginate(options: any | undefined, callback: Function | undefined): Promise<PaginationModel<T> | undefined> {
     //MARK: INIT
-    let key = options.key || "_id"
-    let query = options.query || {}
+    let key = options.key ?? "_id"
+    let query = options.query ?? {}
+    let aggregate = options.aggregate ?? undefined
     let populate = options.populate ?? false
     let select = options.select ?? ""
     let sort = options.sort ?? {}
@@ -57,13 +58,20 @@ export function mongoosePagination(schema: Schema) {
     }
     //MARK: QUERY
     let docsPromise = []
-    const mQuery = this.find(query, projection)
-    mQuery.select(select)
-    mQuery.sort(sort)
-    mQuery.lean({ virtuals: true })
-    if (populate) {
-      mQuery.populate(populate)
+
+    if (aggregate != undefined) {
+      var mQuery: mongoose.Aggregate<T> | any = this.aggregate(aggregate)
+    } else {
+      var mQuery = this.find(query, projection)
+      mQuery.select(select)
+      mQuery.lean({ virtuals: true })
+      if (populate) {
+        mQuery.populate(populate)
+      }
     }
+
+    mQuery.sort(sort)
+
     if (limit > 0) {
       if (useCursor) {
         mQuery.limit(limit + 1)
@@ -77,10 +85,10 @@ export function mongoosePagination(schema: Schema) {
     try {
       let values = await Promise.all([countPromise, docsPromise])
       const [count, docs] = values
-      const meta = new PaginationModel()
+      const meta = new PaginationModel<T>()
       meta.totalDocs = count
       if (!useCursor) {
-        const pages = limit > 0 ? Math.ceil(count / limit) || 1 : 0
+        const pages = limit > 0 ? Math.ceil(count / limit) ?? 1 : 0
         meta.limit = count
         meta.totalPages = 1
         meta.page = page
