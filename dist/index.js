@@ -72,29 +72,29 @@ function mongoosePagination(schema) {
             if (aggregate != undefined) {
                 var mQuery = this.aggregate(aggregate);
                 if (select != undefined) {
-                    mQuery.project(select);
+                    mQuery = mQuery.project(select);
                 }
             }
             else {
                 var mQuery = this.find(query, projection);
                 if (select != undefined) {
-                    mQuery.select(select);
+                    mQuery = mQuery.select(select);
                 }
-                mQuery.lean();
+                mQuery = mQuery.lean();
                 if (populate != undefined) {
-                    mQuery.populate(populate);
+                    mQuery = mQuery.populate(populate);
                 }
             }
             if (sort != undefined) {
-                mQuery.sort(sort);
+                mQuery = mQuery.sort(sort);
             }
             if (limit > 0) {
                 if (useCursor) {
-                    mQuery.limit(limit + 1);
+                    mQuery = mQuery.limit(limit + 1);
                 }
                 else {
-                    mQuery.skip(skip);
-                    mQuery.limit(limit);
+                    mQuery = mQuery.skip(skip);
+                    mQuery = mQuery.limit(limit);
                 }
             }
             docsPromise = mQuery.exec();
