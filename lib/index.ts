@@ -97,9 +97,11 @@ export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T
     try {
       let values = await Promise.all([countPromise, docsPromise])
       const [counts, docs] = values
-      var count
+      var count = 0
       if (aggregate != undefined) {
-        count = counts[0]["count"]
+        if (counts != undefined && counts[0] != undefined && counts[0]["count"] != undefined) {
+          count = counts[0]["count"]
+        }
       } else {
         count = counts
       }
