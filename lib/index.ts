@@ -25,8 +25,8 @@ export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T
     let key = options.key ?? "_id"
     let query = options.query ?? {}
     let aggregate = options.aggregate ?? undefined
-    let populate = options.populate ?? false
-    let select = options.select ?? ""
+    let populate = options.populate ?? undefined
+    let select = options.select ?? undefined
     let sort = options.sort ?? undefined
     let projection = options.projection ?? {}
     let forceCountFunction = options.forceCountFunction ?? false
@@ -41,7 +41,7 @@ export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T
       skip = (page - 1) * limit
     }
     let useCursor = false
-    if (startingAfter != undefined || endingBefore != undefined) {
+    if (query != undefined && (startingAfter != undefined || endingBefore != undefined)) {
       useCursor = true
       query[key] = {}
       if (endingBefore != undefined) {
@@ -52,21 +52,30 @@ export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T
     }
     //MARK: COUNTING
     let countPromise
-    if (forceCountFunction == true) {
-      countPromise = this.count(query).exec()
+    if (aggregate != undefined) {
+      countPromise = this.aggregate(aggregate).count("count")
     } else {
-      countPromise = this.countDocuments(query).exec()
+      if (forceCountFunction == true) {
+        countPromise = this.count(query).exec()
+      } else {
+        countPromise = this.countDocuments(query).exec()
+      }
     }
     //MARK: QUERY
     let docsPromise = []
 
     if (aggregate != undefined) {
       var mQuery: mongoose.Aggregate<T> | any = this.aggregate(aggregate)
+      if (select != undefined) {
+        mQuery.project(select)
+      }
     } else {
       var mQuery = this.find(query, projection)
-      mQuery.select(select)
-      mQuery.lean({ virtuals: true })
-      if (populate) {
+      if (select != undefined) {
+        mQuery.select(select)
+      }
+      mQuery.lean()
+      if (populate != undefined) {
         mQuery.populate(populate)
       }
     }
@@ -87,7 +96,13 @@ export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T
     //MARK: PERFORM
     try {
       let values = await Promise.all([countPromise, docsPromise])
-      const [count, docs] = values
+      const [counts, docs] = values
+      var count
+      if (aggregate != undefined) {
+        count = counts[0]["count"]
+      } else {
+        count = counts
+      }
       const meta = new PaginationModel<T>()
       meta.totalDocs = count
       if (!useCursor) {
