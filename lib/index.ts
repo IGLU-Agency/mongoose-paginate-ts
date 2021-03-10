@@ -27,7 +27,7 @@ export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T
     let aggregate = options.aggregate ?? undefined
     let populate = options.populate ?? false
     let select = options.select ?? ""
-    let sort = options.sort ?? {}
+    let sort = options.sort ?? undefined
     let projection = options.projection ?? {}
     let forceCountFunction = options.forceCountFunction ?? false
     let startingAfter = options.startingAfter ?? undefined
@@ -71,7 +71,9 @@ export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T
       }
     }
 
-    mQuery.sort(sort)
+    if (sort != undefined) {
+      mQuery.sort(sort)
+    }
 
     if (limit > 0) {
       if (useCursor) {

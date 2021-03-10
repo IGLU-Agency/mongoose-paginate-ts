@@ -30,7 +30,7 @@ function mongoosePagination(schema) {
             let aggregate = (_c = options.aggregate) !== null && _c !== void 0 ? _c : undefined;
             let populate = (_d = options.populate) !== null && _d !== void 0 ? _d : false;
             let select = (_e = options.select) !== null && _e !== void 0 ? _e : "";
-            let sort = (_f = options.sort) !== null && _f !== void 0 ? _f : {};
+            let sort = (_f = options.sort) !== null && _f !== void 0 ? _f : undefined;
             let projection = (_g = options.projection) !== null && _g !== void 0 ? _g : {};
             let forceCountFunction = (_h = options.forceCountFunction) !== null && _h !== void 0 ? _h : false;
             let startingAfter = (_j = options.startingAfter) !== null && _j !== void 0 ? _j : undefined;
@@ -75,7 +75,9 @@ function mongoosePagination(schema) {
                     mQuery.populate(populate);
                 }
             }
-            mQuery.sort(sort);
+            if (sort != undefined) {
+                mQuery.sort(sort);
+            }
             if (limit > 0) {
                 if (useCursor) {
                     mQuery.limit(limit + 1);
