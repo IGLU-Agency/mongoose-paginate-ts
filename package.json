@@ -1,6 +1,6 @@
 {
   "name": "mongoose-paginate-ts",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Typescript pagination plugin for mongoose",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/lucaiaconelli/mongoose-paginate-ts.git"
+    "url": "git+ssh://git@github.com/IGLU-Agency/mongoose-paginate-ts.git"
   },
   "keywords": [
     "mongoose",
@@ -30,12 +30,12 @@
     "starting",
     "ending"
   ],
-  "author": "Luca Iaconelli",
+  "author": "IGLU",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lucaiaconelli/mongoose-paginate-ts/issues"
+    "url": "https://github.com/IGLU-Agency/mongoose-paginate-ts/issues"
   },
-  "homepage": "https://github.com/lucaiaconelli/mongoose-paginate-ts#readme",
+  "homepage": "https://github.com/IGLU-Agency/mongoose-paginate-ts#readme",
   "dependencies": {
     "mongoose": "^5.11.19",
     "typescript": "^4.2.3"
