@@ -10,6 +10,9 @@ export declare class PaginationModel<T extends mongoose.Document> {
     hasNextPage: Boolean | undefined;
     prevPage: number | undefined;
     nextPage: number | undefined;
+    /**
+     * @deprecated
+     */
     hasMore: Boolean | undefined;
     docs: T[];
 }

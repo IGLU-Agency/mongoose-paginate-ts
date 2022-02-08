@@ -15,7 +15,10 @@ class PaginationModel {
         this.limit = 0;
         this.hasPrevPage = false;
         this.hasNextPage = false;
-        this.hasMore = false;
+        /**
+         * @deprecated
+         */
+        this.hasMore = false; // EQUAL TO HAS NEXT PAGE
         this.docs = [];
     }
 }
@@ -156,6 +159,7 @@ function mongoosePagination(schema) {
                         meta.hasPrevPage = false;
                         meta.hasNextPage = false;
                     }
+                    meta.hasMore = meta.hasNextPage;
                 }
                 else {
                     meta.limit = undefined;
@@ -163,12 +167,12 @@ function mongoosePagination(schema) {
                     meta.page = undefined;
                     meta.pagingCounter = undefined;
                     meta.hasPrevPage = undefined;
-                    meta.hasNextPage = undefined;
                     const hasMore = docs.length === limit + 1;
                     if (hasMore) {
                         docs.pop();
                     }
                     meta.hasMore = hasMore;
+                    meta.hasNextPage = hasMore;
                     meta.prevPage = undefined;
                     meta.nextPage = undefined;
                 }

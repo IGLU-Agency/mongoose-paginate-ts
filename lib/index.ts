@@ -11,7 +11,10 @@ export class PaginationModel<T extends mongoose.Document> {
   hasNextPage: Boolean | undefined = false
   prevPage: number | undefined
   nextPage: number | undefined
-  hasMore: Boolean | undefined = false
+  /**
+   * @deprecated
+   */
+  hasMore: Boolean | undefined = false // EQUAL TO HAS NEXT PAGE
   docs: T[] = []
 }
 
@@ -20,7 +23,10 @@ export interface Pagination<T extends mongoose.Document> extends Model<T> {
 }
 
 export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T>) {
-  schema.statics.paginate = async function paginate(options: any | undefined, callback: Function | undefined): Promise<PaginationModel<T> | undefined> {
+  schema.statics.paginate = async function paginate(
+    options: any | undefined,
+    callback: Function | undefined
+  ): Promise<PaginationModel<T> | undefined> {
     //MARK: INIT
     let key = options.key ?? "_id"
     let query = options.query ?? {}
@@ -147,18 +153,19 @@ export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T
           meta.hasPrevPage = false
           meta.hasNextPage = false
         }
+        meta.hasMore = meta.hasNextPage
       } else {
         meta.limit = undefined
         meta.totalPages = undefined
         meta.page = undefined
         meta.pagingCounter = undefined
         meta.hasPrevPage = undefined
-        meta.hasNextPage = undefined
         const hasMore = docs.length === limit + 1
         if (hasMore) {
           docs.pop()
         }
         meta.hasMore = hasMore
+        meta.hasNextPage = hasMore
         meta.prevPage = undefined
         meta.nextPage = undefined
       }
