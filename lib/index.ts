@@ -19,18 +19,18 @@ export class PaginationModel<T> {
 }
 
 export interface PaginationOptions {
-  key: string | undefined
-  query: any | undefined
-  aggregate: any | undefined
-  populate: any | undefined
-  select: any | undefined
-  sort: any | undefined
-  projection: any | undefined
-  forceCountFunction: boolean | undefined
-  startingAfter: any | undefined
-  endingBefore: any | undefined
-  limit: any | undefined
-  page: any | undefined
+  key?: string | undefined
+  query?: any | undefined
+  aggregate?: any | undefined
+  populate?: any | undefined
+  select?: any | undefined
+  sort?: any | undefined
+  projection?: any | undefined
+  forceCountFunction?: boolean | undefined
+  startingAfter?: any | undefined
+  endingBefore?: any | undefined
+  limit?: any | undefined
+  page?: any | undefined
 }
 
 export interface Pagination<T> extends Model<T> {
