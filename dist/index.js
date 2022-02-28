@@ -24,26 +24,26 @@ class PaginationModel {
 }
 exports.PaginationModel = PaginationModel;
 function mongoosePagination(schema) {
-    schema.statics.paginate = function paginate(options, callback) {
+    schema.statics.paginate = function paginate(options, onError) {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
         return __awaiter(this, void 0, void 0, function* () {
             //MARK: INIT
-            let key = (_a = options.key) !== null && _a !== void 0 ? _a : "_id";
-            let query = (_b = options.query) !== null && _b !== void 0 ? _b : {};
-            let aggregate = (_c = options.aggregate) !== null && _c !== void 0 ? _c : undefined;
-            let populate = (_d = options.populate) !== null && _d !== void 0 ? _d : undefined;
-            let select = (_e = options.select) !== null && _e !== void 0 ? _e : undefined;
-            let sort = (_f = options.sort) !== null && _f !== void 0 ? _f : undefined;
-            let projection = (_g = options.projection) !== null && _g !== void 0 ? _g : {};
-            let forceCountFunction = (_h = options.forceCountFunction) !== null && _h !== void 0 ? _h : false;
-            let startingAfter = (_j = options.startingAfter) !== null && _j !== void 0 ? _j : undefined;
-            let endingBefore = (_k = options.endingBefore) !== null && _k !== void 0 ? _k : undefined;
+            let key = (_a = options === null || options === void 0 ? void 0 : options.key) !== null && _a !== void 0 ? _a : "_id";
+            let query = (_b = options === null || options === void 0 ? void 0 : options.query) !== null && _b !== void 0 ? _b : {};
+            let aggregate = (_c = options === null || options === void 0 ? void 0 : options.aggregate) !== null && _c !== void 0 ? _c : undefined;
+            let populate = (_d = options === null || options === void 0 ? void 0 : options.populate) !== null && _d !== void 0 ? _d : undefined;
+            let select = (_e = options === null || options === void 0 ? void 0 : options.select) !== null && _e !== void 0 ? _e : undefined;
+            let sort = (_f = options === null || options === void 0 ? void 0 : options.sort) !== null && _f !== void 0 ? _f : undefined;
+            let projection = (_g = options === null || options === void 0 ? void 0 : options.projection) !== null && _g !== void 0 ? _g : {};
+            let forceCountFunction = (_h = options === null || options === void 0 ? void 0 : options.forceCountFunction) !== null && _h !== void 0 ? _h : false;
+            let startingAfter = (_j = options === null || options === void 0 ? void 0 : options.startingAfter) !== null && _j !== void 0 ? _j : undefined;
+            let endingBefore = (_k = options === null || options === void 0 ? void 0 : options.endingBefore) !== null && _k !== void 0 ? _k : undefined;
             //MARK: PAGING
-            const limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
+            const limit = parseInt(options === null || options === void 0 ? void 0 : options.limit, 10) > 0 ? parseInt(options === null || options === void 0 ? void 0 : options.limit, 10) : 0;
             let page = 1;
             let skip = 0;
-            if (options.hasOwnProperty("page")) {
-                page = parseInt(options.page, 10);
+            if ((options === null || options === void 0 ? void 0 : options.page) != undefined) {
+                page = parseInt(options === null || options === void 0 ? void 0 : options.page, 10);
                 skip = (page - 1) * limit;
             }
             let useCursor = false;
@@ -177,14 +177,11 @@ function mongoosePagination(schema) {
                     meta.nextPage = undefined;
                 }
                 meta.docs = docs;
-                if (callback != undefined) {
-                    callback(null, meta);
-                }
                 return meta;
             }
             catch (error) {
-                if (callback != undefined) {
-                    callback(error);
+                if (onError != undefined) {
+                    onError(error);
                 }
                 return undefined;
             }

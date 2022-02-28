@@ -1,6 +1,5 @@
-import * as mongoose from "mongoose";
 import { Schema, Model } from "mongoose";
-export declare class PaginationModel<T extends mongoose.Document> {
+export declare class PaginationModel<T> {
     totalDocs: number | undefined;
     limit: number | undefined;
     totalPages: number | undefined;
@@ -16,7 +15,21 @@ export declare class PaginationModel<T extends mongoose.Document> {
     hasMore: Boolean | undefined;
     docs: T[];
 }
-export interface Pagination<T extends mongoose.Document> extends Model<T> {
-    paginate(options?: any | undefined, callback?: Function | undefined): Promise<PaginationModel<T> | undefined>;
+export interface PaginationOptions {
+    key: string | undefined;
+    query: any | undefined;
+    aggregate: any | undefined;
+    populate: any | undefined;
+    select: any | undefined;
+    sort: any | undefined;
+    projection: any | undefined;
+    forceCountFunction: boolean | undefined;
+    startingAfter: any | undefined;
+    endingBefore: any | undefined;
+    limit: any | undefined;
+    page: any | undefined;
 }
-export declare function mongoosePagination<T extends mongoose.Document>(schema: Schema<T>): void;
+export interface Pagination<T> extends Model<T> {
+    paginate(options?: PaginationOptions | undefined, onError?: Function | undefined): Promise<PaginationModel<T> | undefined>;
+}
+export declare function mongoosePagination<T>(schema: Schema<T>): void;

@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose"
 import { Schema, Model } from "mongoose"
 
-export class PaginationModel<T extends mongoose.Document> {
+export class PaginationModel<T> {
   totalDocs: number | undefined
   limit: number | undefined = 0
   totalPages: number | undefined
@@ -18,32 +18,50 @@ export class PaginationModel<T extends mongoose.Document> {
   docs: T[] = []
 }
 
-export interface Pagination<T extends mongoose.Document> extends Model<T> {
-  paginate(options?: any | undefined, callback?: Function | undefined): Promise<PaginationModel<T> | undefined>
+export interface PaginationOptions {
+  key: string | undefined
+  query: any | undefined
+  aggregate: any | undefined
+  populate: any | undefined
+  select: any | undefined
+  sort: any | undefined
+  projection: any | undefined
+  forceCountFunction: boolean | undefined
+  startingAfter: any | undefined
+  endingBefore: any | undefined
+  limit: any | undefined
+  page: any | undefined
 }
 
-export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T>) {
+export interface Pagination<T> extends Model<T> {
+  paginate(
+    options?: PaginationOptions | undefined,
+    onError?: Function | undefined
+  ): Promise<PaginationModel<T> | undefined>
+}
+
+export function mongoosePagination<T>(schema: Schema<T>) {
   schema.statics.paginate = async function paginate(
-    options: any | undefined,
-    callback: Function | undefined
+    options: PaginationOptions | undefined,
+    onError: Function | undefined
   ): Promise<PaginationModel<T> | undefined> {
     //MARK: INIT
-    let key = options.key ?? "_id"
-    let query = options.query ?? {}
-    let aggregate = options.aggregate ?? undefined
-    let populate = options.populate ?? undefined
-    let select = options.select ?? undefined
-    let sort = options.sort ?? undefined
-    let projection = options.projection ?? {}
-    let forceCountFunction = options.forceCountFunction ?? false
-    let startingAfter = options.startingAfter ?? undefined
-    let endingBefore = options.endingBefore ?? undefined
+    let key = options?.key ?? "_id"
+    let query = options?.query ?? {}
+    let aggregate = options?.aggregate ?? undefined
+    let populate = options?.populate ?? undefined
+    let select = options?.select ?? undefined
+    let sort = options?.sort ?? undefined
+    let projection = options?.projection ?? {}
+    let forceCountFunction = options?.forceCountFunction ?? false
+    let startingAfter = options?.startingAfter ?? undefined
+    let endingBefore = options?.endingBefore ?? undefined
     //MARK: PAGING
-    const limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0
+    const limit = parseInt(options?.limit, 10) > 0 ? parseInt(options?.limit, 10) : 0
     let page = 1
     let skip = 0
-    if (options.hasOwnProperty("page")) {
-      page = parseInt(options.page, 10)
+    if (options?.page != undefined) {
+      page = parseInt(options?.page, 10)
       skip = (page - 1) * limit
     }
     let useCursor = false
@@ -170,13 +188,10 @@ export function mongoosePagination<T extends mongoose.Document>(schema: Schema<T
         meta.nextPage = undefined
       }
       meta.docs = docs
-      if (callback != undefined) {
-        callback(null, meta)
-      }
       return meta
     } catch (error) {
-      if (callback != undefined) {
-        callback(error)
+      if (onError != undefined) {
+        onError(error)
       }
       return undefined
     }
