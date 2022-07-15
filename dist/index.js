@@ -25,7 +25,7 @@ class PaginationModel {
 exports.PaginationModel = PaginationModel;
 function mongoosePagination(schema) {
     schema.statics.paginate = function paginate(options, onError) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
         return __awaiter(this, void 0, void 0, function* () {
             //MARK: INIT
             let key = (_a = options === null || options === void 0 ? void 0 : options.key) !== null && _a !== void 0 ? _a : "_id";
@@ -36,8 +36,9 @@ function mongoosePagination(schema) {
             let sort = (_f = options === null || options === void 0 ? void 0 : options.sort) !== null && _f !== void 0 ? _f : undefined;
             let projection = (_g = options === null || options === void 0 ? void 0 : options.projection) !== null && _g !== void 0 ? _g : {};
             let forceCountFunction = (_h = options === null || options === void 0 ? void 0 : options.forceCountFunction) !== null && _h !== void 0 ? _h : false;
-            let startingAfter = (_j = options === null || options === void 0 ? void 0 : options.startingAfter) !== null && _j !== void 0 ? _j : undefined;
-            let endingBefore = (_k = options === null || options === void 0 ? void 0 : options.endingBefore) !== null && _k !== void 0 ? _k : undefined;
+            let lean = (_j = options === null || options === void 0 ? void 0 : options.lean) !== null && _j !== void 0 ? _j : true;
+            let startingAfter = (_k = options === null || options === void 0 ? void 0 : options.startingAfter) !== null && _k !== void 0 ? _k : undefined;
+            let endingBefore = (_l = options === null || options === void 0 ? void 0 : options.endingBefore) !== null && _l !== void 0 ? _l : undefined;
             //MARK: PAGING
             const limit = parseInt(options === null || options === void 0 ? void 0 : options.limit, 10) > 0 ? parseInt(options === null || options === void 0 ? void 0 : options.limit, 10) : 0;
             let page = 1;
@@ -83,7 +84,9 @@ function mongoosePagination(schema) {
                 if (select != undefined) {
                     mQuery = mQuery.select(select);
                 }
-                mQuery = mQuery.lean();
+                if (lean) {
+                    mQuery = mQuery.lean();
+                }
                 if (populate != undefined) {
                     mQuery = mQuery.populate(populate);
                 }
@@ -117,7 +120,7 @@ function mongoosePagination(schema) {
                 const meta = new PaginationModel();
                 meta.totalDocs = count;
                 if (!useCursor) {
-                    const pages = limit > 0 ? (_l = Math.ceil(count / limit)) !== null && _l !== void 0 ? _l : 1 : 0;
+                    const pages = limit > 0 ? (_m = Math.ceil(count / limit)) !== null && _m !== void 0 ? _m : 1 : 0;
                     meta.limit = count;
                     meta.totalPages = 1;
                     meta.page = page;

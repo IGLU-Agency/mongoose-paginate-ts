@@ -27,6 +27,7 @@ export interface PaginationOptions {
   sort?: any | undefined
   projection?: any | undefined
   forceCountFunction?: boolean | undefined
+  lean?: boolean | undefined
   startingAfter?: any | undefined
   endingBefore?: any | undefined
   limit?: any | undefined
@@ -54,6 +55,7 @@ export function mongoosePagination<T>(schema: Schema<T>) {
     let sort = options?.sort ?? undefined
     let projection = options?.projection ?? {}
     let forceCountFunction = options?.forceCountFunction ?? false
+    let lean = options?.lean ?? true
     let startingAfter = options?.startingAfter ?? undefined
     let endingBefore = options?.endingBefore ?? undefined
     //MARK: PAGING
@@ -98,7 +100,9 @@ export function mongoosePagination<T>(schema: Schema<T>) {
       if (select != undefined) {
         mQuery = mQuery.select(select)
       }
-      mQuery = mQuery.lean()
+      if (lean) {
+        mQuery = mQuery.lean()
+      }
       if (populate != undefined) {
         mQuery = mQuery.populate(populate)
       }
