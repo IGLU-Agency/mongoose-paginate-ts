@@ -25,6 +25,7 @@ export interface PaginationOptions {
     projection?: any | undefined;
     forceCountFunction?: boolean | undefined;
     lean?: boolean | undefined;
+    leanOptions?: any | undefined;
     startingAfter?: any | undefined;
     endingBefore?: any | undefined;
     limit?: any | undefined;
