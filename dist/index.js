@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mongoosePagination = exports.PaginationModel = void 0;
+exports.PaginationModel = void 0;
+exports.mongoosePagination = mongoosePagination;
 class PaginationModel {
     constructor() {
         this.limit = 0;
@@ -25,8 +26,8 @@ class PaginationModel {
 exports.PaginationModel = PaginationModel;
 function mongoosePagination(schema) {
     schema.statics.paginate = function paginate(options, onError) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
             //MARK: INIT
             let key = (_a = options === null || options === void 0 ? void 0 : options.key) !== null && _a !== void 0 ? _a : "_id";
             let query = (_b = options === null || options === void 0 ? void 0 : options.query) !== null && _b !== void 0 ? _b : {};
@@ -66,7 +67,7 @@ function mongoosePagination(schema) {
             }
             else {
                 if (forceCountFunction == true) {
-                    countPromise = this.count(query).exec();
+                    countPromise = this.countDocuments(query).exec();
                 }
                 else {
                     countPromise = this.countDocuments(query).exec();
@@ -192,4 +193,3 @@ function mongoosePagination(schema) {
         });
     };
 }
-exports.mongoosePagination = mongoosePagination;

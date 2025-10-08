@@ -84,7 +84,7 @@ export function mongoosePagination<T>(schema: Schema<T>) {
       countPromise = this.aggregate(aggregate).count("count")
     } else {
       if (forceCountFunction == true) {
-        countPromise = this.count(query).exec()
+        countPromise = this.countDocuments(query).exec()
       } else {
         countPromise = this.countDocuments(query).exec()
       }
