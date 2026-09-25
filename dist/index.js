@@ -52,13 +52,13 @@ function mongoosePagination(schema) {
             let useCursor = false;
             if (query != undefined && (startingAfter != undefined || endingBefore != undefined)) {
                 useCursor = true;
-                query[key] = {};
-                if (endingBefore != undefined) {
-                    query[key] = { $lt: endingBefore };
-                }
-                else {
-                    query[key] = { $gt: startingAfter };
-                }
+                // The cursor narrows the caller's query: it is ANDed with it, never
+                // assigned over it. Assigning `query[key]` replaced whatever condition the
+                // caller had on the key (typically `_id: { $in: <ids this caller may see> }`),
+                // so a cursor widened a scoped list to the whole collection, and the count
+                // with it. A new object also leaves the caller's query untouched.
+                const cursorCondition = endingBefore != undefined ? { $lt: endingBefore } : { $gt: startingAfter };
+                query = { $and: [query, { [key]: cursorCondition }] };
             }
             //MARK: COUNTING
             let countPromise;
